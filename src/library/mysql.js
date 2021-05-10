@@ -1,12 +1,12 @@
 const mysql = require('promise-mysql');
-const { mysqlConfig } = require('../../config/dbConfig');
+const { mySqlConfig } = require('../../config/dbConfig');
 // async await 문법을 사용하기 위해 promise-mysql 사용
 
 let mysqlPool;
 
 async function getMysqlPool() { 
     if (!mysqlPool) {
-        mysqlPool = await mysql.createPool(mysqlConfig);
+        mysqlPool = await mysql.createPool(mySqlConfig);
         return mysqlPool;
     }
     return mysqlPool;

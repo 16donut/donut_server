@@ -1,6 +1,6 @@
 const randToken = require('rand-token');
 const jwt = require('jsonwebtoken');
-const { secretConfig } = require("../../config/secretConfig.js");
+const { secretKeyConfig } = require("../../config/secretConfig.js");
 const { errResponse } = require("../library/response");
 const returnCode = require("../library/returnCode");
 
@@ -9,14 +9,14 @@ function sign(userIdx) {
     userIdx: userIdx
     }
     const result = { // sign 메소드를 이용해 access 토큰 발급
-        "token" : jwt.sign(payload, secretConfig.secretKey, secretConfig.option) // secretKey모듈의 시크릿키, 옵션 가져옴
+        "token" : jwt.sign(payload, secretKeyConfig.secretKey, secretKeyConfig.option) // secretKey모듈의 시크릿키, 옵션 가져옴
     } 
     return result;
 }
 
 function verify(authorization) { // verify를 통해 토큰 값을 decode 한다.
     try {
-       return jwt.verify(authorization, secretConfig.secretKey); // return userIdx
+       return jwt.verify(authorization, secretKeyConfig.secretKey); // return userIdx
     } catch (err) {
         if (err.message === 'jwt expired') {
             console.log('expired token');
@@ -40,7 +40,7 @@ function isLogin(req, res, next) {
         };
     } else { // 토큰이 있는 경우
         try {  // 유효한 경우 token을 decode
-        req.user = jwt.verify(authorization, secretConfig.secretKey);
+        req.user = jwt.verify(authorization, secretKeyConfig.secretKey);
         next();
 
         } catch (error) { // 유효하지 않은 경우
@@ -53,7 +53,7 @@ function checkLogin(req, res, next) {
     const { authorization } = req.headers;
 
     try { // 유효한 경우 token decode
-        req.user = jwt.verify(authorization, secretConfig.secretKey);
+        req.user = jwt.verify(authorization, secretKeyConfig.secretKey);
         next();
 
     } catch (error) { // 유효하지 않은 경우 
