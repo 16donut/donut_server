@@ -81,7 +81,7 @@ async function postAuthSignin(body) {
     }
     const token = jwt.sign(userInfo[0].userIdx); // sign 메소드를 이용해 access 토큰 발급
 
-    let user_access_dt = moment().format('YYYY-MM-DD'); // 마지막 로그인 시간 
+    let user_access_dt = moment().format('YYYY-MM-DD'); // 현재 시간 조회
 
     let resetData = {
         "user_id": user_id,
