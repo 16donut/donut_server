@@ -57,16 +57,16 @@ async function getMypagePrescription(req, res) {  // 처방전목록조회(최�
         const decoded = verify(token);
         const userIdx = decoded.userIdx;
 
-        // // 토큰 확인
-        // if(decoded == -3){
-        //     errResponse(res,returnCode.UNAUTHORIZED, "만료된 토큰입니다");
-        // }else if(decoded == -2){
-        //     errResponse(res,returnCode.UNAUTHORIZED, "invalid token");
-        // }
+        // 토큰 확인
+        if(decoded == -3){
+            errResponse(res,returnCode.UNAUTHORIZED, "만료된 토큰입니다");
+        }else if(decoded == -2){
+            errResponse(res,returnCode.UNAUTHORIZED, "invalid token");
+        }
         
         // 유저키를 이용하여 DAO에서 처리 후 객체 반환
-        const prescription = await getMypagePrescription.getMypagePrescriptionService(userIdx);
-        console.log(prescription);
+        const prescription = await mypageService.getMypagePrescriptionService(userIdx);
+
         // 1. 처방전이 없을 경우
         if(prescription == -1){
             response(res, returnCode.BAD_REQUEST, "등록된 처방전이 없습니다");

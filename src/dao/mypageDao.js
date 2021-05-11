@@ -8,11 +8,7 @@ async function selectUserInfo(userIdx) {
 
 // 처방전 리스트 조회
 async function selectPrescriptionList(userIdx) {
-    // ORDER BY prescription_dt DESC
-    console.log("22");
-    const selectListSql = `SELECT prescriptionIdx FROM PRESCRIPTION WHERE userIdx = ?`;
-    console.log("11");
-    console.log(selectListSql);
+    const selectListSql = `SELECT prescriptionIdx, prescription_dt FROM PRESCRIPTION WHERE userIdx = ? ORDER BY prescription_dt DESC`;
     return await mysql.query(selectListSql, userIdx);
 }
 
