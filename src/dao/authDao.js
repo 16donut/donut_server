@@ -12,7 +12,7 @@ async function selectUserId(user_id) {  // 존재하는 유저 조회
 }
 
 async function selectUserInfo(user_id) {  // 존재하는 유저 & user_salt & user_pwd 조회
-    const selectUserIdSql = `SELECT user_id, user_salt, user_pwd FROM USER WHERE user_id = ?`;
+    const selectUserIdSql = `SELECT userIdx, user_id, user_salt, user_pwd FROM USER WHERE user_id = ?`;
     return await mysql.query(selectUserIdSql, [user_id]);
 }
 
