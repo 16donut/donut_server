@@ -15,8 +15,10 @@ function sign(userIdx) {
 }
 
 function verify(authorization) { // verify를 통해 토큰 값을 decode 한다.
+    let decoded;
     try {
-       return jwt.verify(authorization, secretKeyConfig.secretKey); // return userIdx
+        decoded = jwt.verify(authorization, secretKeyConfig.secretKey);
+        return decoded;
     } catch (err) {
         if (err.message === 'jwt expired') {
             console.log('expired token');
@@ -34,7 +36,7 @@ function verify(authorization) { // verify를 통해 토큰 값을 decode 한다
 function isLogin(req, res, next) {
     const { authorization } = req.headers;
 
-    if (!authorization) { // 토큰이 없는 경우
+    if (authorization == undefined) { // 토큰이 없는 경우
         req.user = {
             userIdx: null
         };
