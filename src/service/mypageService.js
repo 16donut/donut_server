@@ -39,28 +39,27 @@ async function getMypageInfoService(userIdx){
 */
 async function getMypagePrescriptionService(userIdx){
     const prescriptionList = await mypageDao.selectPrescriptionList(userIdx);
-    console.log(prescription);
+    console.log(prescriptionList);
 
     // 1. 처방전이 없을 경우
     if(prescriptionList.length == 0){
         return -1;
     }
+    let prescriptionArray= new Array;
 
-    let prescription = {
-        "prescriptionIdx" : "",
-        "prescription_dt" : Date
-    };
-
+    console.log(prescriptionList.length);
     for (let i = 0 ; i<prescriptionList.length; i++){
+        let prescription = {
+            "prescriptionIdx" : "",
+            "prescription_dt" : Date
+        };
+
         prescription.prescriptionIdx = prescriptionList[i].prescriptionIdx;
         prescription.prescription_dt = prescriptionList[i].prescription_dt;
+        prescriptionArray.push(prescription);
     };
 
-    console.log("11");
-    console.log(prescriptionList[0]);
-    console.log(prescriptionList[1]);
-
-    return prescription;
+    return prescriptionArray;
 
 }
 
@@ -85,11 +84,6 @@ async function getMypagePrescriptionService(userIdx){
 //     if(userPrescription.length == 0){
 //         return -1;
 //     }
-
-
-   
-
-
 // }
 
 
