@@ -6,7 +6,7 @@ router.use("/auth", require("./auth"));
 //router.use("/main", require("./main"));
 //router.use("/calendar", require("./calendar"));
 //router.use("/return", require("./return"));
-//router.use("/mypage", require("./mypage"));
+router.use("/mypage", require("./mypage"));
 
 
 // 공부용으로 만든것

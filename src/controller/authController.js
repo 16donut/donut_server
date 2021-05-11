@@ -53,7 +53,7 @@ async function postAuthSignin(req, res) {
         else if(userData == -3) { // user_pwd가 틀렸을 경우
             response(res, returnCode.UNAUTHORIZED, "비밀번호가 틀렸습니다");
         }
-        else if(userData == -4) { // 쿼리문이 제대로 수행되지 않았을 경우 = 마지막 로그인 시간 갱신이 되지 않았을 경우
+        else if(userData == -4) { // 쿼리문이 제대로 수행되지 않았을 경우
             response(res, returnCode.BAD_REQUEST, "DB에 데이터가 입력되지 않았습니다");
         }
         else {
@@ -85,23 +85,8 @@ async function getAuthToken(req, res) {
     }
 }
 
-async function getAuthTokenToIdx(req, res) {   
-    try {
-        const token = req.headers.authorization;
-        const decoded = verify(token);
-        const userIdx = decoded.userIdx;
-        response(res, returnCode.OK, "userIdx 조회 성공");
-
-    } catch (error) {
-        console.log(error.message);
-        errResponse(res, returnCode.INTERNAL_SERVER_ERROR, "서버 오류");
-    }
-}
-
-
 module.exports = {
     postAuthSignin,
     postAuthSignup,
-    getAuthToken,
-    getAuthTokenToIdx
+    getAuthToken
 }
