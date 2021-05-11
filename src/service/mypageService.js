@@ -3,46 +3,49 @@ const mypageDao = require('../dao/mypageDao');
 /* 내 정보 조회
     user = userIdx, user_id, user_name, user_access_dt
     -   Error   -
-    1. 아이디가 존재하지 않을 경우
+    1. 요청 바디가 존재하지 않을 경우
+    2. 아이디가 존재하지 않을 경우
 */
-async function getMypageInfo(user_id){
-    // const user_id = body.user_id;
+async function getMypageInfoService(userIdx){
     
-    //요청 바디가 없을 경우
-    if(!user_id){
+    // 1. 요청 바디가 없을 경우
+    if(!userIdx){
         return -1;
     }
 
-    const selectUserInfo = await mypageDao.selectUserInfo(user_id);
+    const user = await mypageDao.selectUserInfo(userIdx);
     
-    // 유저가 존재하지 않을 경우
-    if(selectUserInfo.length == 0) { 
+    // 2. 유저가 존재하지 않을 경우
+    if(user.length == 0) { 
         return -2;
     }
 
-    // 해당 유저 데이터
+    // 유저 데이터
     const UserData = {
         "user_id" : "",
         "user_name" : ""
     };
-    UserData.user_id = selectUserInfo[0].user_id;
-    UserData.user_name = selectUserInfo[0].user_name;
+    UserData.user_id = user[0].user_id;
+    UserData.user_name = user[0].user_name;
 
     return UserData;
 }
+
 
 /* 처방전 리스트 조회
     prescriptionIdx, prescription_dt
     -   Error   -
     1. 처방전이 없을 경우
 */
-async function postMypageMedicine(user_id){
-    const [prescriptionList] = await mypageDao.selectPrescriptionList(user_id);
+async function getMypagePrescriptionService(userIdx){
+    const prescriptionList = await mypageDao.selectPrescriptionList(userIdx);
+    console.log(prescription);
 
-    // 처방전이 없을 경우
+    // 1. 처방전이 없을 경우
     if(prescriptionList.length == 0){
         return -1;
     }
+
     let prescription = {
         "prescriptionIdx" : "",
         "prescription_dt" : Date
@@ -52,6 +55,12 @@ async function postMypageMedicine(user_id){
         prescription.prescriptionIdx = prescriptionList[i].prescriptionIdx;
         prescription.prescription_dt = prescriptionList[i].prescription_dt;
     };
+
+    console.log("11");
+    console.log(prescriptionList[0]);
+    console.log(prescriptionList[1]);
+
+    return prescription;
 
 }
 
@@ -85,5 +94,6 @@ async function postMypageMedicine(user_id){
 
 
 module.exports = {
-    getMypageInfo    // 유저 정보 조회
+    getMypageInfoService,    // 유저 정보 조회
+    getMypagePrescriptionService
 }
