@@ -3,22 +3,10 @@ const mypageDao = require('../dao/mypageDao');
 /* 내 정보 조회
     user = userIdx, user_id, user_name, user_access_dt
     -   Error   -
-    1. 요청 바디가 존재하지 않을 경우
-    2. 아이디가 존재하지 않을 경우
+    * 토큰값 검사로 불필요
 */
 async function getMypageInfoService(userIdx){
-    
-    // 1. 요청 바디가 없을 경우
-    if(!userIdx){
-        return -1;
-    }
-
     const user = await mypageDao.selectUserInfo(userIdx);
-    
-    // 2. 유저가 존재하지 않을 경우
-    if(user.length == 0) { 
-        return -2;
-    }
 
     // 유저 데이터
     const UserData = {
