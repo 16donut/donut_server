@@ -47,6 +47,9 @@ async function getMypageInfo(req, res) {  // 내정보 조회
 async function getMypagePrescription(req, res) {  // 처방전목록조회(최신순)
     try{
         // 토큰
+        if(req.headers.authorization == null){
+            errResponse(res, returnCode.BAD_REQUEST, '토큰 값이 요청되지 않았습니다');
+        }
         const token = req.headers.authorization;
         const decoded = verify(token);
         const userIdx = decoded.userIdx;
