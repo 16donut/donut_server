@@ -11,7 +11,7 @@ const mypageService = require('../service/mypageService');
 async function getMypageInfo(req, res) {  // 내정보 조회
     try{
         // 1. req.headers.authorizaition 가 없을 경우
-        if(req.headers.authorization == 0){
+        if(req.headers.authorization == null){
             errResponse(res, returnCode.BAD_REQUEST, '토큰 값이 요청되지 않았습니다');
         }
 
