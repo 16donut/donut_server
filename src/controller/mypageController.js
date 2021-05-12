@@ -6,11 +6,15 @@ const mypageService = require('../service/mypageService');
 
 /* 내 정보 조회
     user = userIdx, user_id, user_name, user_access_dt
-    1. 요청 바디가 존재하지 않을 경우
-    2. 아이디가 존재하지 않을 경우
+    1. req.headers.authorizaition 가 없을 경우
 */
 async function getMypageInfo(req, res) {  // 내정보 조회
     try{
+        // 1. req.headers.authorizaition 가 없을 경우
+        if(req.headers.authorization == 0){
+            errResponse(res, returnCode.BAD_REQUEST, '토큰 값이 요청되지 않았습니다');
+        }
+
         // 토큰
         const token = req.headers.authorization;
         const decoded = verify(token);
@@ -23,21 +27,11 @@ async function getMypageInfo(req, res) {  // 내정보 조회
             errResponse(res,returnCode.UNAUTHORIZED, "invalid token");
         }
 
-        
         // mypageService 에서 받아온 유저정보
         const userInfo = await mypageService.getMypageInfoService(userIdx);
+        response(res,returnCode.OK, '유저정보 조회 성공', userInfo);
         
-        // 1. 요청 바디가 없을 경우
-        if(userInfo == -1){
-            errResponse(res, returnCode.BAD_REQUEST, '요청된 데이터가 없습니다.');
-        }
-        // 2. 해당 유저 정보가 없을 경우
-        else if(userInfo == -2){    
-            response(res, returnCode.BAD_REQUEST, "등록된 유저 정보가 없습니다");
-        }
-        else{
-            response(res,returnCode.OK, '유저정보 조회 성공', userInfo);
-        }
+    
     }catch(error){
         console.log(error.message);
         errResponse(res,returnCode.INTERNAL_SERVER_ERROR ,"서버 오류");
