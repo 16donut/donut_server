@@ -20,22 +20,27 @@ async function getMypageInfoService(userIdx){
 }
 
 
-/* 처방전 리스트 조회
+/* 처방전 리스트 조회 (최신순)
     prescriptionIdx, prescription_dt
     -   Error   -
     1. 처방전이 없을 경우
+    
+    -   주의  -
+    2. 조회는 성공했으나 개수가 0개인 경우
 */
 async function getMypagePrescriptionService(userIdx){
     const prescriptionList = await mypageDao.selectPrescriptionList(userIdx);
-    console.log(prescriptionList);
 
     // 1. 처방전이 없을 경우
-    if(prescriptionList.length == 0){
-        return -1;
+    if(prescriptionList == null){
+        return -2
+    }
+    // 2. 조회는 성공했으나 개수가 0개인 경우
+    else if(prescriptionList.length == 0){
+        return -3;
     }
     let prescriptionArray= new Array;
 
-    console.log(prescriptionList.length);
     for (let i = 0 ; i<prescriptionList.length; i++){
         let prescription = {
             "prescriptionIdx" : "",
@@ -51,31 +56,56 @@ async function getMypagePrescriptionService(userIdx){
 
 }
 
-/* 1개의 처방전 약품 조회
-    prescriptionIdx, allMedicineIdx, total_dose_dt, my_dose_dt
+/* 1개의 처방전 약품 조회(가나다)
+    prescriptionIdx, preMedicineIdx, pre_medicine_name, total_dose_dt, my_does_dt, total_does_count
     -   Error   -
-    1. 처방전이 없을 경우
-    2. 최대 복용 기간이 음수거나 계산할 수 없을 경우
+    1. 요청이 없을 경우 (처방전이 없을 경우)
+    2. 해당하는 처방전이 없는 경우
+    3. 약을 찾을 수 없거나, 개수가 음수일 경우
 */
-// async function postMypageMedicine(user_id){
-//     const userPrescription = await mypageDao.selectMyPagePrescription(user_id);
-//     let myPrescription = {
-//         "prescriptionIdx" : "",
-//         "allMedicineIdx" : [],
-//         "total_dose_dt" : Date,
-//         "my_dose_dt" : Date,
-//         "maxDose_dt" : 0
-//     }
+async function getONEPrescriptionService(prescriptionIdx){
+    // 1. 요청이 존재하지 않을 경우
+    if(prescriptionIdx== null){
+        return -1;
+    }
 
+    const onePrescription = await mypageDao.selectONEPrescription(prescriptionIdx);
+    // 2. 해당하는 처방전이 없는 경우
+    if(onePrescription.length == 0){
+        return -2;
+    }
+    let prescriptionArray= new Array;
 
-//     // 처방전이 존재하지 않을 경우
-//     if(userPrescription.length == 0){
-//         return -1;
-//     }
-// }
+    for (let i = 0 ; i<onePrescription.length; i++){
+        let prescription = {
+            "prescriptionIdx" : "",
+            "preMedicineIdx" : "",
+            "pre_medicine_name" : "",
+            "total_dose_dt" : 0,
+            "my_does_dt" : 0,
+            "total_does_count" : 0
+        };
+
+        prescription.prescriptionIdx = onePrescription[i].prescriptionIdx;
+        prescription.preMedicineIdx = onePrescription[i].preMedicineIdx;
+        prescription.pre_medicine_name = onePrescription[i].pre_medicine_name;
+        prescription.total_dose_dt = onePrescription[i].total_dose_dt;
+        prescription.my_does_dt = onePrescription[i].my_does_dt;
+        prescription.total_does_count = onePrescription[i].total_does_count;
+
+        // 3. 약을 찾을 수 없거나, 개수가 음수일 경우
+        if(prescription.total_does_count < 0){
+            return -3
+        }
+        prescriptionArray.push(prescription);
+    };
+
+    return prescriptionArray;
+}
 
 
 module.exports = {
-    getMypageInfoService,    // 유저 정보 조회
-    getMypagePrescriptionService
+    getMypageInfoService,           // 유저 정보 조회
+    getMypagePrescriptionService,   // 처방전 리스트 조회
+    getONEPrescriptionService       // 한개의 처방전 조회
 }

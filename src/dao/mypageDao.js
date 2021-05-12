@@ -6,27 +6,26 @@ async function selectUserInfo(userIdx) {
     return await mysql.query(selectUserSql, userIdx);
 }
 
-// 처방전 리스트 조회
+// 처방전 리스트 조회 (최신순)
 async function selectPrescriptionList(userIdx) {
     const selectListSql = `SELECT prescriptionIdx, prescription_dt FROM PRESCRIPTION WHERE userIdx = ? ORDER BY prescription_dt DESC`;
     return await mysql.query(selectListSql, userIdx);
 }
 
 
-// 1개의 처방전 약품조회
-// async function selectMyPagePrescription(user_id){
-//     const [selectUserId] = `SELECT prescriptionIdx FROM PRESCRIPTION WHERE = ?`;
-//     const user_prescription = await mysql.query(selectUserId, [user_id]);
+// 1개의 처방전 약품조회 (가나다)
+async function selectONEPrescription(prescriptionIdx){
+    const selectONEPrescription = `
+    SELECT prescriptionIdx, preMedicineIdx, pre_medicine_name,total_does_dt,my_does_dt, total_does_count
+    FROM PRESCRIPTION_MEDICINE 
+    WHERE prescriptionIdx = ?
+    ORDER BY pre_medicine_name`;
+    return await mysql.query(selectONEPrescription, prescriptionIdx);
+}
 
 
-//     const selectMovieSql = `SELECT allMedicineIdx, total_dose_dt, my_dose_dt FROM PRESCRIPTION WHERE = ?`;
-//     return await mysql.query(selectMovieSql, [user_prescription]);
-    
-//     const selectMovieSql = `SELECT prescriptionIdx ,allMedicineIdx, total_dose_dt, my_dose_dt FROM PRESCRIPTION, USER WHERE USER.user_id = PRESCRIPTION.user_id and PRESCRIPTION.user_id = ?`;
-//     return await mysql.query(selectMovieSql, [user_prescription]);
-// }
 module.exports = {
     selectUserInfo,
-    selectPrescriptionList
-    // selectMyPagePrescription
+    selectPrescriptionList,
+    selectONEPrescription
 }
