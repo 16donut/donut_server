@@ -43,6 +43,9 @@ async function getMypageInfo(req, res) {  // 내정보 조회
     prescriptionIdx, prescription_dt
     -   Error   -
     1. 처방전이 없을 경우
+
+    -   주의  -
+    2. 조회는 성공했으나 개수가 0개인 경우
 */
 async function getMypagePrescription(req, res) {  // 처방전목록조회(최신순)
     try{
@@ -65,10 +68,15 @@ async function getMypagePrescription(req, res) {  // 처방전목록조회(최�
         const prescription = await mypageService.getMypagePrescriptionService(userIdx);
 
         // 1. 처방전이 없을 경우
-        if(prescription == -1){
-            response(res, returnCode.BAD_REQUEST, "등록된 처방전이 없습니다");
-        }else{
-            response(res,returnCode.OK, '처방전리스트 조회 성공', prescription);
+        if(prescription == -2){
+            errResponse(res, returnCode.BAD_REQUEST, "등록된 처방전이 없습니다");
+        }
+        // 2. 조회는 성공했으나 개수가 0개인 경우
+        else if(prescription == -3){
+            response(res,returnCode.OK, '처방전리스트 조회 성공(0개)');
+        }
+        else{
+            response(res,returnCode.OK, '처방전리스트 조회 성공(n개)', prescription);
         }
 
     }catch(error){
@@ -76,12 +84,53 @@ async function getMypagePrescription(req, res) {  // 처방전목록조회(최�
         errResponse(res, returnCode.DB_ERROR, "처방전 목록이 없습니다")
     }
 }
-// async function postMypageMedicine(req, res) {  // 1개의처방전약품조회(가나다)
-// }
+
+/* 1개의 처방전 약품 조회
+    req: prescriptionIdx
+    prescriptionIdx, preMedicineIdx, pre_medicine_name, total_dose_dt, my_does_dt, total_does_count
+    -   Error   -
+    1. 요청이 없을 경우 (처방전이 없을 경우)
+    2. 해당하는 처방전이 없는 경우
+    3. 약을 찾을 수 없거나, 개수가 음수일 경우
+*/
+async function getONEPriscription(req, res) {  // 1개의처방전약품조회(가나다)
+    try{
+        // 토큰
+        if(req.headers.authorization == null){
+            errResponse(res, returnCode.BAD_REQUEST, '토큰 값이 요청되지 않았습니다');
+        }
+        const token = req.headers.authorization;
+        const decoded = verify(token);
+        const userIdx = decoded.userIdx;
+
+        // 토큰 확인
+        if(decoded == -3){
+            errResponse(res,returnCode.UNAUTHORIZED, "만료된 토큰입니다");
+        }else if(decoded == -2){
+            errResponse(res,returnCode.UNAUTHORIZED, "invalid token");
+        }
+
+        const onePrescription = await mypageService.getONEPrescriptionService(req.query.prescriptionIdx);
+        
+        if(onePrescription == -1){               // 1. 요청이 존재하지 않을 경우
+            errResponse(res,returnCode.BAD_REQUEST, "처방전이 요청되지 않았습니다");
+        }else if(onePrescription == -2){        // 2. 해당하는 처방전이 없는 경우
+            errResponse(res,returnCode.BAD_REQUEST, "해당하는 처방전이 없습니다");
+        }else if(onePrescription == -3){         // 3. 약을 찾을 수 없거나, 개수가 음수일 경우
+            errResponse(res,returnCode.BAD_REQUEST, "잘못된 처방전 입니다");
+        } else{
+            response(res,returnCode.OK, '해당 처방전 조회 성공', onePrescription);
+        }
+        
+    }catch(error){
+        console.log(error);
+        errResponse(res, returnCode.DB_ERROR, "해당 처방전을 불러오지 못했습니다")
+    }
+}
 
 
 module.exports = { 
     getMypageInfo,
-    getMypagePrescription
-    // postMypageMedicine
+    getMypagePrescription,
+    getONEPriscription
 }
