@@ -42,7 +42,6 @@ async function getReturnPharmacy(req, res) {  // 약국조회(gps->가나다)
     } catch (error) {
         console.log(error.message);
         errResponse(res, returnCode.INTERNAL_SERVER_ERROR, "서버 오류");
-   
     }
 }
 
