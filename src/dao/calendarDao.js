@@ -23,7 +23,19 @@ async function selectDontEatMedecine(user_idx){
     return await mysql.query(dontEatMedecineSql, param);
 }
 
+async function selectAbandonMedecine(user_idx){
+    const abandonMedecineSql = `
+    SELECT pm.pre_medicine_name as name, em.expire_dt as date
+    FROM EXPIRE_MEDICINE as em, PRESCRIPTION AS ps, PRESCRIPTION_MEDICINE AS pm, DOES_CHECK AS dc
+    WHERE ps.userIdx = ? AND ps.prescriptionIdx = pm.prescriptionIdx AND pm.preMedicineIdx =dc.preMedicineIdx AND dc.does_check = 0 
+    AND em.preMedicineIdx = pm.preMedicineIdx AND em.expire_dt < now()
+    ORDER BY date DESC
+    `
+    const param = [user_idx];
+    return await mysql.query(abandonMedecineSql, param);
+}
 module.exports = {
     selectEatMedecine,
-    selectDontEatMedecine
+    selectDontEatMedecine,
+    selectAbandonMedecine
 }

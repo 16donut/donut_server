@@ -55,8 +55,16 @@ async function insertPharmacy(body){
 }
 
 async function selectPharmacy(req){
+
+    if(!req.query.longitude || !req.query.latitude){
+        return -1
+    }
     const selectData = await returnDao.selectPharmacydao(req.query.longitude, req.query.latitude);
     var dataList = [];
+
+    if(selectData.length == 0){
+        return -2;
+    }
 
     for (var i=0; i< selectData.length; i++){
     const allData = {

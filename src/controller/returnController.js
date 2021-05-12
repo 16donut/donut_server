@@ -13,7 +13,7 @@ async function insertAroundPharmacy(req, res){ // 내 위치 주변 약국 등�
     try{
 
         if(!req.body.longitude || !req.body.latitude){
-            response(res, returnCode.BAD_REQUEST, '위도나 경도를 body에 보내주세요');
+            response(res, returnCode.BAD_REQUEST, 'not found body instance');
         }else{
             var check = await returnService.insertPharmacy(req.body);
 
@@ -35,12 +35,14 @@ async function getReturnPharmacy(req, res) {  // 약국조회(gps->가나다)
     try{
 
         var pharmacyData = await returnService.selectPharmacy(req);
-    
-        if(pharmacyData == []){
-            errResponse(res, returnCode.BAD_REQUEST, 'no data');
-        }
 
-        response(res, returnCode.OK, '데이터가 검색 되었습니다.', pharmacyData);
+        if(pharmacyData == -1){
+            response(res, returnCode.BAD_REQUEST, 'param이 없습니다.')
+        }else if(pharmacyData == -2){
+            response(res, returnCode.BAD_REQUEST, '검색된 약국이 없습니다.');
+        }else{
+            response(res, returnCode.OK, '주변 약국 검색 성공', pharmacyData);
+        }
 
     } catch (error) {
         console.log(error.message);
