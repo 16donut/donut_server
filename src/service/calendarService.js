@@ -3,8 +3,8 @@ const calendarDao = require('../dao/calendarDao');
 
 //먹은 약 찾기
 async function selectEatMedcineService(user_idx){
-    let selectData = await calendarDao.selectEatMedecine(user_idx);
-    let dataList = [];
+    var selectData = await calendarDao.selectEatMedecine(user_idx);
+    var dataList = [];
     //데이터가 없을때
     if(selectData.length == 0){
         return -1;
@@ -28,8 +28,8 @@ async function selectEatMedcineService(user_idx){
 
 //안 먹은 약 찾기
 async function selectDontEatMedecineService(user_idx){
-    let selectData = await calendarDao.selectDontEatMedecine(user_idx);
-    let dataList = [];
+    var selectData = await calendarDao.selectDontEatMedecine(user_idx);
+    var dataList = [];
     //데이터가 없을 경우
     if(selectData.length == 0){
         return -1;
@@ -57,11 +57,12 @@ async function selectDontEatMedecineService(user_idx){
 
 // 버릴 약 찾기
 async function selectAbondonMedecine(user_idx){
-    let selectData = await calendarDao.selectAbandonMedecine(user_idx);
+    var selectData = await calendarDao.selectAbandonMedecine(user_idx);
+    var dataList = [];
 
-    let dataList = [];
     //데이터가 없을 경우
     if(selectData.length == 0){
+        console.log('들어옴');
         return -1;
     }
 

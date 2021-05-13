@@ -27,7 +27,7 @@ async function getCalendarEat(req, res) {  // 먹은 약 조회
 
 
         if(eatSelectData == -1){
-            response(res, returnCode.NO_CONTENT, "검색된 약이 없습니다");
+            response(res, returnCode.OK, "검색된 약이 없습니다");
         }else{
             response(res,returnCode.OK, '먹은 약 검색 성공', eatSelectData);
         }
@@ -88,7 +88,7 @@ async function getCalendarExpire(req, res) {  // 버릴 약 조회
         var abandonSelectData = await calendarService.selectAbondonMedecine(userIdx);
 
         if(abandonSelectData == -1){
-            response(res, returnCode.NO_CONTENT, "검색된 약이 없습니다");
+            response(res, returnCode.OK, "검색된 약이 없습니다");
         }else{
             response(res,returnCode.OK, '버릴 약 검색 성공', abandonSelectData);
         }
