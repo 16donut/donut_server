@@ -30,8 +30,10 @@ async function insertPharmacydao(pharmacyInfo){
     const params = [pharmacyInfo.name, pharmacyInfo.address, pharmacyInfo.phone_number, pharmacyInfo.longitude, pharmacyInfo.latitude, pharmacyInfo.longitude, pharmacyInfo.latitude];
     await mysql.query(insertPharmacySql,params);
 }
+
+
 module.exports = {
     selectPharmacydao,
-    insertPharmacydao
+    insertPharmacydao,
 }
 

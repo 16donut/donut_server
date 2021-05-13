@@ -92,5 +92,5 @@ async function selectPharmacy(req){
 
 module.exports = {
     insertPharmacy,
-    selectPharmacy
+    selectPharmacy,
 }
