@@ -87,11 +87,10 @@ async function getMypagePrescription(req, res) {  // 처방전목록조회(최�
 
 /* 1개의 처방전 약품 조회
     req: prescriptionIdx
-    prescriptionIdx, preMedicineIdx, pre_medicine_name, total_dose_dt, my_does_dt, total_does_count
+    userIdx, prescriptionIdx, preMedicineIdx, pre_medicine_name, total_does_dt, my_does_dt, total_does_count
     -   Error   -
     1. 요청이 없을 경우 (처방전이 없을 경우)
     2. 해당하는 처방전이 없는 경우
-    3. 약을 찾을 수 없거나, 개수가 음수일 경우
 */
 async function getONEPriscription(req, res) {  // 1개의처방전약품조회(가나다)
     try{
@@ -110,14 +109,12 @@ async function getONEPriscription(req, res) {  // 1개의처방전약품조회(�
             errResponse(res,returnCode.UNAUTHORIZED, "invalid token");
         }
 
-        const onePrescription = await mypageService.getONEPrescriptionService(req.query.prescriptionIdx);
+        const onePrescription = await mypageService.getONEPrescriptionService(userIdx, req.query.prescriptionIdx);
         
         if(onePrescription == -1){               // 1. 요청이 존재하지 않을 경우
             errResponse(res,returnCode.BAD_REQUEST, "처방전이 요청되지 않았습니다");
         }else if(onePrescription == -2){        // 2. 해당하는 처방전이 없는 경우
             errResponse(res,returnCode.BAD_REQUEST, "해당하는 처방전이 없습니다");
-        }else if(onePrescription == -3){         // 3. 약을 찾을 수 없거나, 개수가 음수일 경우
-            errResponse(res,returnCode.BAD_REQUEST, "잘못된 처방전 입니다");
         } else{
             response(res,returnCode.OK, '해당 처방전 조회 성공', onePrescription);
         }
