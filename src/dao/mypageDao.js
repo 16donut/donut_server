@@ -14,13 +14,15 @@ async function selectPrescriptionList(userIdx) {
 
 
 // 1개의 처방전 약품조회 (가나다)
-async function selectONEPrescription(prescriptionIdx){
+async function selectONEPrescription(userIdx, prescriptionIdx){
     const selectONEPrescription = `
-    SELECT prescriptionIdx, preMedicineIdx, pre_medicine_name,total_does_dt,my_does_dt, total_does_count
-    FROM PRESCRIPTION_MEDICINE 
-    WHERE prescriptionIdx = ?
-    ORDER BY pre_medicine_name`;
-    return await mysql.query(selectONEPrescription, prescriptionIdx);
+    SELECT PRESCRIPTION.userIdx, PRESCRIPTION_MEDICINE.prescriptionIdx, PRESCRIPTION_MEDICINE.preMedicineIdx, PRESCRIPTION_MEDICINE.pre_medicine_name, PRESCRIPTION_MEDICINE.total_does_dt, PRESCRIPTION_MEDICINE.my_does_dt, PRESCRIPTION_MEDICINE.total_does_count
+    FROM donut_schema.PRESCRIPTION
+    LEFT OUTER JOIN PRESCRIPTION_MEDICINE ON PRESCRIPTION.prescriptionIdx = PRESCRIPTION_MEDICINE.prescriptionIdx
+    WHERE PRESCRIPTION.userIdx = ?
+    AND PRESCRIPTION.prescriptionIdx = ?
+    ORDER BY pre_medicine_name;`;
+    return await mysql.query(selectONEPrescription, [userIdx, prescriptionIdx]);
 }
 
 

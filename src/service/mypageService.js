@@ -57,19 +57,18 @@ async function getMypagePrescriptionService(userIdx){
 }
 
 /* 1개의 처방전 약품 조회(가나다)
-    prescriptionIdx, preMedicineIdx, pre_medicine_name, total_dose_dt, my_does_dt, total_does_count
+    userIdx, prescriptionIdx, preMedicineIdx, pre_medicine_name, total_does_dt, my_does_dt, total_does_count
     -   Error   -
     1. 요청이 없을 경우 (처방전이 없을 경우)
     2. 해당하는 처방전이 없는 경우
-    3. 약을 찾을 수 없거나, 개수가 음수일 경우
 */
-async function getONEPrescriptionService(prescriptionIdx){
+async function getONEPrescriptionService(userIdx, prescriptionIdx){
     // 1. 요청이 존재하지 않을 경우
     if(prescriptionIdx== null){
         return -1;
     }
 
-    const onePrescription = await mypageDao.selectONEPrescription(prescriptionIdx);
+    const onePrescription = await mypageDao.selectONEPrescription(userIdx, prescriptionIdx);
     // 2. 해당하는 처방전이 없는 경우
     if(onePrescription.length == 0){
         return -2;
@@ -78,27 +77,26 @@ async function getONEPrescriptionService(prescriptionIdx){
 
     for (let i = 0 ; i<onePrescription.length; i++){
         let prescription = {
+            "userIdx": "",
             "prescriptionIdx" : "",
             "preMedicineIdx" : "",
             "pre_medicine_name" : "",
-            "total_dose_dt" : 0,
+            "total_does_dt" : 0,
             "my_does_dt" : 0,
             "total_does_count" : 0
         };
 
+        prescription.userIdx = onePrescription[i].userIdx;
         prescription.prescriptionIdx = onePrescription[i].prescriptionIdx;
         prescription.preMedicineIdx = onePrescription[i].preMedicineIdx;
         prescription.pre_medicine_name = onePrescription[i].pre_medicine_name;
-        prescription.total_dose_dt = onePrescription[i].total_dose_dt;
+        prescription.total_does_dt = onePrescription[i].total_does_dt;
         prescription.my_does_dt = onePrescription[i].my_does_dt;
         prescription.total_does_count = onePrescription[i].total_does_count;
 
-        // 3. 약을 찾을 수 없거나, 개수가 음수일 경우
-        if(prescription.total_does_count < 0){
-            return -3
-        }
         prescriptionArray.push(prescription);
     };
+    console.log(prescriptionArray);
 
     return prescriptionArray;
 }
