@@ -68,20 +68,20 @@ async function selectPharmacy(req){
 
     for (var i=0; i< selectData.length; i++){
     const allData = {
-        "idx" : 0,
-        "name" : "",
-        "address" : "",
-        "number" : "",
-        "longitude" : 0.0,
-        "latitude" : 0.0
+        "pharmacyIdx" : 0,
+        "pharmacy_name" : "",
+        "pharmacy_address" : "",
+        "pharmacy_number" : "",
+        "pharmacy_longitude" : 0.0,
+        "pharmacy_latitude" : 0.0
     }
 
-    allData.idx = selectData[i].pharmacyIdx;
-    allData.name = selectData[i].pharmacy_name;
-    allData.address = selectData[i].pharmacy_address;
-    allData.number = selectData[i].pharmacy_number;
-    allData.longitude = selectData[i].pharmacy_longitude;
-    allData.latitude = selectData[i].pharmacy_latitude;
+    allData.pharmacyIdx = selectData[i].pharmacyIdx;
+    allData.pharmacy_name = selectData[i].pharmacy_name;
+    allData.pharmacy_address = selectData[i].pharmacy_address;
+    allData.pharmacy_number = selectData[i].pharmacy_number;
+    allData.pharmacy_longitude = selectData[i].pharmacy_longitude;
+    allData.pharmacy_latitude = selectData[i].pharmacy_latitude;
 
     dataList[i] = allData;
 
