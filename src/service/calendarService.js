@@ -22,14 +22,14 @@ async function selectEatMedicineService(user_idx){
 
     for(var i = 0 ; i < selectData.length; i++){
         var allData = {
-            "medicine_idx" : 0,
-            "name" : "",
-            "eat_date" : Date
+            "preMedicineIdx" : 0,
+            "pre_medicine_name" : "",
+            "does_dt" : Date
         }
 
-        allData.medicine_idx = selectData[i].idx;
-        allData.name = selectData[i].name;
-        allData.eat_date = formatDate(selectData[i].date);
+        allData.preMedicineIdx = selectData[i].idx;
+        allData.pre_medicine_name = selectData[i].name;
+        allData.does_dt = formatDate(selectData[i].date);
 
         dataList.push(allData);
     }
@@ -50,16 +50,16 @@ async function selectNoEatMedicineService(user_idx){
     for(var i = 0 ; i < selectData.length; i++){
         // 이름, 조제일, 가용 일수
         var allData = {
-            "medicine_idx" : 0,
-            "name" : "",
-            "make_date" : Date,
-            "late_date" : 0
+            "preMedicineIdx" : 0,
+            "pre_medicine_name" : "",
+            "prescription_dt" : Date,
+            "medicine_max_dt" : 0
         }
 
-        allData.medicine_idx = selectData[i].idx;
-        allData.name = selectData[i].name;
-        allData.make_date = formatDate(selectData[i].date);
-        allData.late_date = selectData[i].max_date
+        allData.preMedicineIdx = selectData[i].idx;
+        allData.pre_medicine_name = selectData[i].name;
+        allData.prescription_dt = formatDate(selectData[i].date);
+        allData.medicine_max_dt = selectData[i].max_date
 
         dataList.push(allData);
     }
@@ -76,21 +76,20 @@ async function selectAbandonMedicine(user_idx){
 
     //데이터가 없을 경우
     if(selectData.length == 0){
-        console.log('들어옴');
         return -1;
     }
 
     for(var i = 0 ; i < selectData.length; i++){
         // 이름, 만료일
         var allData = {
-            "medicine_idx" : 0,
-            "name" : "",
-            "expire_date" : Date,
+            "preMedicineIdx" : 0,
+            "pre_medicine_name" : "",
+            "expire_dt" : Date,
         }
         
-        allData.medicine_idx = selectData[i].idx;
-        allData.name = selectData[i].name;
-        allData.expire_date = formatDate(selectData[i].date);
+        allData.preMedicineIdx = selectData[i].idx;
+        allData.pre_medicine_name = selectData[i].name;
+        allData.expire_dt = formatDate(selectData[i].date);
 
         dataList.push(allData);
     }
