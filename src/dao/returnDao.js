@@ -21,16 +21,6 @@ async function selectPharmacydao(xpos, ypos){
     return await mysql.query(selectPharmacySql,param);
 }
 
-async function insertPharmacydao(pharmacyInfo){
-    const insertPharmacySql = `
-    INSERT INTO PHARMACY(pharmacy_name, pharmacy_address, pharmacy_number, pharmacy_longitude, pharmacy_latitude)
-    SELECT ?,?,?,?,?
-    WHERE NOT EXISTS 
-    (SELECT * FROM PHARMACY WHERE pharmacy_longitude = ? AND pharmacy_latitude = ?)`;
-    const params = [pharmacyInfo.name, pharmacyInfo.address, pharmacyInfo.phone_number, pharmacyInfo.longitude, pharmacyInfo.latitude, pharmacyInfo.longitude, pharmacyInfo.latitude];
-    await mysql.query(insertPharmacySql,params);
-}
-
 /* 버릴약 목록 전체조회 (최신순)
     userIdx, prescriptionIdx, preMedicineIdx, pre_medicine_name, expireIdx, expire_dt, abandon_check
     -   Error   -
@@ -49,7 +39,6 @@ async function selectReturnExpiredao(userIdx){
 
 module.exports = {
     selectPharmacydao,
-    insertPharmacydao,
     selectReturnExpiredao
 }
 

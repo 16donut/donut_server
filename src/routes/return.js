@@ -9,6 +9,5 @@ router.delete('/expire', returnController.deleteReturnExpire);    // 버릴약�
 
 router.get('/expire', returnController.getReturnExpire);    // 버릴약목록전체조회(최신순)
 
-router.get('/pharmacy', returnController.getReturnPharmacy);    // 약국조회(gps->가나다)
-router.post('/pharmacy', returnController.insertAroundPharmacy);
+router.get('/pharmacy', returnController.getReturnPharmacy);    // 약국조회(gps->가나다)\
 module.exports = router;
