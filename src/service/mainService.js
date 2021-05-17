@@ -172,9 +172,9 @@ async function getMainExpireService(userIdx){
 
     for (let i = 0 ; i<expireList.length; i++){
         let expire = {
-            "userIdx" : "",
-            "prescriptionIdx" : "",
-            "preMedicineIdx" : "",
+            "userIdx" : 0,
+            "prescriptionIdx" : 0,
+            "preMedicineIdx" : 0,
             "pre_medicine_name" : "",
             "expireIdx" : "",
             "expire_dt" : Date,

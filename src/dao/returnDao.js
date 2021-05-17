@@ -37,8 +37,17 @@ async function selectReturnExpiredao(userIdx){
     return await mysql.query(selectExpireList, [userIdx]);
 }
 
+
+// 버릴약 목록 회수 완료
+async function updateExpireCheckdao(expireIdx) { 
+    const updateExpireCheckSql = `UPDATE EXPIRE_MEDICINE SET abandon_check = ? WHERE expireIdx = ?`;
+    return await mysql.query(updateExpireCheckSql, [1, expireIdx]);
+}
+
+
 module.exports = {
     selectPharmacydao,
-    selectReturnExpiredao
+    selectReturnExpiredao,
+    updateExpireCheckdao
 }
 

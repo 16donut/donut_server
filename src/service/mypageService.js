@@ -10,7 +10,7 @@ async function getMypageInfoService(userIdx){
 
     // 유저 데이터
     const UserData = {
-        "user_id" : "",
+        "user_id" : 0,
         "user_name" : ""
     };
     UserData.user_id = user[0].user_id;
@@ -43,7 +43,7 @@ async function getMypagePrescriptionService(userIdx){
 
     for (let i = 0 ; i<prescriptionList.length; i++){
         let prescription = {
-            "prescriptionIdx" : "",
+            "prescriptionIdx" : 0,
             "prescription_dt" : Date
         };
 
@@ -77,10 +77,10 @@ async function getONEPrescriptionService(userIdx, prescriptionIdx){
 
     for (let i = 0 ; i<onePrescription.length; i++){
         let prescription = {
-            "userIdx": "",
-            "prescriptionIdx" : "",
-            "preMedicineIdx" : "",
-            "pre_medicine_name" : "",
+            "userIdx": 0,
+            "prescriptionIdx" : 0,
+            "preMedicineIdx" : 0,
+            "pre_medicine_name" : 0,
             "total_does_dt" : 0,
             "my_does_dt" : 0,
             "total_does_count" : 0

@@ -88,7 +88,7 @@ async function getReturnExpireService(userIdx){
     const expireList = await returnDao.selectReturnExpiredao(userIdx);
 
 
-    // 2. 조회는 성공했으나 개수가 0개인 경우
+    // 1. 조회는 성공했으나 개수가 0개인 경우
     if(expireList.length == 0){
         return -3;
     }
@@ -119,8 +119,35 @@ async function getReturnExpireService(userIdx){
     return expireArray;
 }
 
+/* 버릴약 목록 삭제 (회수완료)
+    회수완료: 1 update
+
+        -   Error   -
+    1. 요청 바디가 없을 경우
+    2. update에 실패했을 경우
+
+*/
+async function putReturnExpireService(body){
+    const expireIdx = body.expireIdx;
+
+    // 1. 요청 바디가 없을 경우
+    if(!expireIdx){
+        return -1;
+    }
+
+    const expireCheckResult = await returnDao.updateExpireCheckdao(expireIdx);
+
+    // 2. update에 실패했을 경우
+    if(!expireCheckResult){
+        return -2
+    }
+
+    return 0;
+}
+
 
 module.exports = {
     selectPharmacy,
-    getReturnExpireService
+    getReturnExpireService,
+    putReturnExpireService
 }
