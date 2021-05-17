@@ -4,7 +4,7 @@ var router = express.Router();
 var mainController = require('../controller/mainController.js')
 
 
-// router.get('/expire', mainController.getMainExpire);    // 버릴약목록전체조회(최신순)
+router.get('/expire', mainController.getMainExpire);    // 버릴약목록전체조회(최신순)
 router.get('/check', mainController.getMainCheck);    // 일별복용체크조회
 router.put('/check', mainController.putMainDoesCheck);    // 일별복용체크수정
 router.put('/check/cancel', mainController.putMainDoesCheckCancel);    // 일별복용체크수정

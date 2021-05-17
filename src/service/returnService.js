@@ -90,7 +90,50 @@ async function selectPharmacy(req){
 }
 
 
+/* 버릴약 목록 전체조회 (최신순)
+    userIdx, prescriptionIdx, preMedicineIdx, pre_medicine_name, expireIdx, expire_dt, abandon_check
+    
+    -   주의   -
+    1. 조회는 성공했으나 개수가 0개인 경우
+*/
+async function getReturnExpireService(userIdx){
+    const expireList = await returnDao.selectReturnExpiredao(userIdx);
+
+
+    // 2. 조회는 성공했으나 개수가 0개인 경우
+    if(expireList.length == 0){
+        return -3;
+    }
+    let expireArray= new Array;
+
+    for (let i = 0 ; i<expireList.length; i++){
+        let expire = {
+            "userIdx" : "",
+            "prescriptionIdx" : "",
+            "preMedicineIdx" : "",
+            "pre_medicine_name" : "",
+            "expireIdx" : "",
+            "expire_dt" : Date,
+            "abandon_check" : 0
+        };
+
+        expire.userIdx = expireList[i].userIdx;
+        expire.prescriptionIdx = expireList[i].prescriptionIdx;
+        expire.preMedicineIdx = expireList[i].preMedicineIdx;
+        expire.pre_medicine_name = expireList[i].pre_medicine_name;
+        expire.expireIdx = expireList[i].expireIdx;
+        expire.expire_dt = expireList[i].expire_dt;
+        expire.abandon_check = expireList[i].abandon_check;
+
+        expireArray.push(expire);
+    };
+
+    return expireArray;
+}
+
+
 module.exports = {
     insertPharmacy,
     selectPharmacy,
+    getReturnExpireService
 }
