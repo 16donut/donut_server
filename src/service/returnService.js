@@ -124,10 +124,11 @@ async function getReturnExpireService(userIdx){
 
         -   Error   -
     1. 요청 바디가 없을 경우
-    2. update에 실패했을 경우
+    2. user와 expireIdx가 일치하지 않을 경우
+    3. update에 실패했을 경우
 
 */
-async function putReturnExpireService(body){
+async function putReturnExpireService(body, userIdx){
     const expireIdx = body.expireIdx;
 
     // 1. 요청 바디가 없을 경우
@@ -135,14 +136,20 @@ async function putReturnExpireService(body){
         return -1;
     }
 
-    const expireCheckResult = await returnDao.updateExpireCheckdao(expireIdx);
-
-    // 2. update에 실패했을 경우
-    if(!expireCheckResult){
-        return -2
+    const expireCheckUser = await returnDao.checkExpireUserdao(userIdx,expireIdx);
+    const expirdCheck = await returnDao.selectExpireCheckdao(expireIdx);
+    
+    // 2. user와 expireIdx가 일치하지 않을 경우
+    if(expireCheckUser < 1){
+        return -2;
     }
-
-    return 0;
+    // 3. update에 실패했을 경우
+    else if(expirdCheck.length == 1){
+        return -3;
+    }else{
+        const expireCheckResult = await returnDao.updateExpireCheckdao(expireIdx);
+        return 0;
+    }
 }
 
 

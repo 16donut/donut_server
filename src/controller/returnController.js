@@ -49,7 +49,8 @@ async function getReturnExpire(req, res) {  // 버릴약목록전체조회(최�
 
             -   Error   -
     1. 요청 바디가 없을 경우
-    2. update에 실패했을 경우
+    2. user와 expireIdx가 일치하지 않을 경우
+    3. update에 실패했을 경우
 
 */
 async function putReturnExpire(req, res) {  // 버릴약목록삭제(회수완료)
@@ -69,14 +70,18 @@ async function putReturnExpire(req, res) {  // 버릴약목록삭제(회수완�
             errResponse(res,returnCode.UNAUTHORIZED, "invalid token");
         }
 
-        const expireCheckResult = await returnService.putReturnExpireService(req.body);
+        const expireCheckResult = await returnService.putReturnExpireService(req.body, userIdx);
         
         // 1. 요청 바디가 없을 경우
         if(expireCheckResult == -1){
             errResponse(res, returnCode.BAD_REQUEST, "요청 값이 올바르지 않습니다");
         }
-        // 2. update에 실패했을 경우
+        // 2. user와 expireIdx가 일치하지 않을 경우
         else if(expireCheckResult == -2){
+            errResponse(res, returnCode.BAD_REQUEST, "해당 유저의 회수 약이 잘못되었습니다");
+        }
+        // 3. update에 실패했을 경우
+        else if(expireCheckResult == -3){
             errResponse(res, returnCode.BAD_REQUEST, "DB 업데이트에 실패했습니다");
         }else{
             response(res,returnCode.CREATED, "약품 회수 완료");
