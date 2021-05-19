@@ -5,7 +5,7 @@ async function selectEatMedicine(user_idx){
     SELECT pm.preMedicineIdx as idx, pm.pre_medicine_name as name, dc.does_dt as date
     FROM PRESCRIPTION AS ps, PRESCRIPTION_MEDICINE AS pm, DOES_CHECK AS dc
     WHERE ps.userIdx = ? AND ps.prescriptionIdx = pm.prescriptionIdx AND pm.preMedicineIdx =dc.preMedicineIdx AND dc.does_check = 1
-    ORDER BY date DESC
+    ORDER BY date ASC
     `;
     const param = [user_idx];
     return await mysql.query(EatMedicinedSql, param);
@@ -17,7 +17,7 @@ async function selectNoEatMedicine(user_idx){
     FROM PRESCRIPTION AS ps, PRESCRIPTION_MEDICINE AS pm, DOES_CHECK AS dc, ALL_MEDICINE AS am
     WHERE ps.userIdx = ? AND ps.prescriptionIdx = pm.prescriptionIdx AND pm.preMedicineIdx =dc.preMedicineIdx 
     AND dc.does_check = 0 AND am.medicine_name = pm.pre_medicine_name
-    ORDER BY date DESC
+    ORDER BY date ASC
     `;
     const param = [user_idx];
     return await mysql.query(noEatMedicineSql, param);
