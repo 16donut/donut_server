@@ -48,18 +48,16 @@ async function selectNoEatMedicineService(user_idx){
     }
 
     for(var i = 0 ; i < selectData.length; i++){
-        // 이름, 조제일, 가용 일수
+        // 약 인덱스, 이름, 조제일
         var allData = {
             "preMedicineIdx" : 0,
             "pre_medicine_name" : "",
             "prescription_dt" : Date,
-            "medicine_max_dt" : 0
         }
 
         allData.preMedicineIdx = selectData[i].idx;
         allData.pre_medicine_name = selectData[i].name;
         allData.prescription_dt = formatDate(selectData[i].date);
-        allData.medicine_max_dt = selectData[i].max_date
 
         dataList.push(allData);
     }
