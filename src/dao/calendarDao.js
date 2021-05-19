@@ -13,10 +13,10 @@ async function selectEatMedicine(user_idx){
 
 async function selectNoEatMedicine(user_idx){
     const noEatMedicineSql = `
-    SELECT pm.preMedicineIdx as idx, pm.pre_medicine_name as name, ps.prescription_dt as date, am.medicine_max_dt as max_date
-    FROM PRESCRIPTION AS ps, PRESCRIPTION_MEDICINE AS pm, DOES_CHECK AS dc, ALL_MEDICINE AS am
+    SELECT pm.preMedicineIdx as idx, pm.pre_medicine_name as name, ps.prescription_dt as date
+    FROM PRESCRIPTION AS ps, PRESCRIPTION_MEDICINE AS pm, DOES_CHECK AS dc
     WHERE ps.userIdx = ? AND ps.prescriptionIdx = pm.prescriptionIdx AND pm.preMedicineIdx =dc.preMedicineIdx 
-    AND dc.does_check = 0 AND am.medicine_name = pm.pre_medicine_name
+    AND dc.does_check = 0
     ORDER BY date ASC
     `;
     const param = [user_idx];
