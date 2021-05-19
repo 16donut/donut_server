@@ -29,7 +29,7 @@ async function selectAbandonMedicine(user_idx){
     FROM EXPIRE_MEDICINE as em, PRESCRIPTION AS ps, PRESCRIPTION_MEDICINE AS pm, DOES_CHECK AS dc
     WHERE ps.userIdx = ? AND ps.prescriptionIdx = pm.prescriptionIdx AND pm.preMedicineIdx =dc.preMedicineIdx AND dc.does_check = 0 
     AND em.preMedicineIdx = pm.preMedicineIdx AND em.expire_dt < now()
-    ORDER BY date DESC
+    ORDER BY date ASC
     `
     const param = [user_idx];
     return await mysql.query(abandonMedicineSql, param);
