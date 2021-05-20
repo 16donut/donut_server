@@ -2,6 +2,14 @@ const returnDao = require('../dao/returnDao');
 const request = require('sync-request');
 const converter = require('xml-js');
 
+function formatDate(date) { 
+    var d = new Date(date), month = '' + (d.getMonth() + 1),  day = '' + d.getDate(),  year = d.getFullYear(); 
+    if (month.length < 2) 
+        month = '0' + month; 
+    if (day.length < 2) 
+        day = '0' + day; 
+    return [year, month, day].join('-'); }
+
 //약국 조회(최대20개)
 async function selectPharmacy(req){
 
@@ -110,7 +118,7 @@ async function getReturnExpireService(userIdx){
         expire.preMedicineIdx = expireList[i].preMedicineIdx;
         expire.pre_medicine_name = expireList[i].pre_medicine_name;
         expire.expireIdx = expireList[i].expireIdx;
-        expire.expire_dt = expireList[i].expire_dt;
+        expire.expire_dt = formatDate(expireList[i].expire_dt);
         expire.abandon_check = expireList[i].abandon_check;
 
         expireArray.push(expire);

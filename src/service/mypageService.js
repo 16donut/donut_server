@@ -1,5 +1,14 @@
 const mypageDao = require('../dao/mypageDao');
 
+function formatDate(date) { 
+    var d = new Date(date), month = '' + (d.getMonth() + 1),  day = '' + d.getDate(),  year = d.getFullYear(); 
+    if (month.length < 2) 
+        month = '0' + month; 
+    if (day.length < 2) 
+        day = '0' + day; 
+    return [year, month, day].join('-'); 
+}
+
 /* 내 정보 조회
     user = userIdx, user_id, user_name, user_access_dt
     -   Error   -
@@ -48,7 +57,7 @@ async function getMypagePrescriptionService(userIdx){
         };
 
         prescription.prescriptionIdx = prescriptionList[i].prescriptionIdx;
-        prescription.prescription_dt = prescriptionList[i].prescription_dt;
+        prescription.prescription_dt = formatDate(prescriptionList[i].prescription_dt);
         prescriptionArray.push(prescription);
     };
 
