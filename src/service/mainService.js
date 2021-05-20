@@ -1,6 +1,14 @@
 const mainDao = require('../dao/mainDao');
 const moment = require('moment');
 
+function formatDate(date) { 
+    var d = new Date(date), month = '' + (d.getMonth() + 1),  day = '' + d.getDate(),  year = d.getFullYear(); 
+    if (month.length < 2) 
+        month = '0' + month; 
+    if (day.length < 2) 
+        day = '0' + day; 
+    return [year, month, day].join('-'); }
+
 /* 일별 복용 체크 조회 */ 
 async function getMainDoesCheck(userIdx) {
     let today = moment().format('YYYY-MM-DD'); // 오늘의 날짜 조회
@@ -186,7 +194,7 @@ async function getMainExpireService(userIdx){
         expire.preMedicineIdx = expireList[i].preMedicineIdx;
         expire.pre_medicine_name = expireList[i].pre_medicine_name;
         expire.expireIdx = expireList[i].expireIdx;
-        expire.expire_dt = expireList[i].expire_dt;
+        expire.expire_dt = formatDate(expireList[i].expire_dt);
         expire.abandon_check = expireList[i].abandon_check;
         
         expireArray.push(expire);
