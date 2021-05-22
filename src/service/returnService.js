@@ -8,37 +8,12 @@ function formatDate(date) {
         month = '0' + month; 
     if (day.length < 2) 
         day = '0' + day; 
-    return [year, month, day].join('-'); }
+    return [year, month, day].join('-'); 
+}
 
-//약국 조회(최대20개)
-async function selectPharmacy(req){
+function apiselect(jbody, total){
 
-    //param이 제대로 안들어 왔을때
-    if(!req.query.longitude || !req.query.latitude){
-        return -1
-    }
-
-    var DataList = [];
-    var url = 'http://apis.data.go.kr/B551182/pharmacyInfoService/getParmacyBasisList';
-    var key = 'PLo6jiIN0HeZlR%2F6VMg54t7W9zrN9GtRRXySPLeOzjCi5B7ukNvc9IS%2FdpASIXhd8ZHXkYTMMntVEUDqMgdWXg%3D%3D';
-
-    var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + key; /* Service Key*/
-    queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /* */
-    queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('20'); /* */
-    queryParams += '&' + encodeURIComponent('xPos') + '=' + encodeURIComponent(`${req.query.longitude}`); /* */
-    queryParams += '&' + encodeURIComponent('yPos') + '=' + encodeURIComponent(`${req.query.latitude}`); /* */
-    queryParams += '&' + encodeURIComponent('radius') + '=' + encodeURIComponent('2000'); /* */
-
-
-    res = await request('GET', url + queryParams);
-
-    apibody = res.getBody();
-
-    var jsonbody = converter.xml2json(apibody, {compact: true ,spaces:4});
-    var jbody = JSON.parse(jsonbody);
-
-    total = jbody.response.body.totalCount._text;
-
+    DataList = []
     if(total > 20)
         for(var i =0; i<20; i++){
             var listData = {
@@ -76,27 +51,84 @@ async function selectPharmacy(req){
             }
 
             DataList[i] = listData;
-    }else{
-        for(var i =0; i<total; i++){
-            var listData = {
-                "pharmacy_name" : "",
-                "pharmacy_number" : "",
-                "pharmacy_address" : "",
-                "pharmacy_longitude" : 0.0,
-                "pharmacy_latitude" : 0.0
-            };
-        
-            listData.pharmacy_name = jbody.response.body.items.item[i].yadmNm._text;
-            listData.pharmacy_number = jbody.response.body.items.item[i].telno._text;
-            listData.pharmacy_address = jbody.response.body.items.item[i].addr._text;
-            listData.pharmacy_longitude = jbody.response.body.items.item[i].XPos._text;
-            listData.pharmacy_latitude = jbody.response.body.items.item[i].YPos._text;
+        }else{
+            for(var i =0; i<total; i++){
+                var listData = {
+                    "pharmacy_name" : "",
+                    "pharmacy_number" : "",
+                    "pharmacy_address" : "",
+                    "pharmacy_longitude" : 0.0,
+                    "pharmacy_latitude" : 0.0
+                };
+            
+                if(jbody.response.body.items.item[i].yadmNm != undefined){
+                    listData.pharmacy_name = jbody.response.body.items.item[i].yadmNm._text;
+                }else{
+                    listData.pharmacy_name = null;
+                }
+                if(jbody.response.body.items.item[i].telno != undefined){
+                    listData.pharmacy_number = jbody.response.body.items.item[i].telno._text;
+                }else{
+                    listData.pharmacy_number = null;
+                }
+                if(jbody.response.body.items.item[i].addr != undefined){
+                    listData.pharmacy_address = jbody.response.body.items.item[i].addr._text;
+                }else{
+                    listData.pharmacy_address = null;
+                }
+                if(jbody.response.body.items.item[i].XPos != undefined){
+                    listData.pharmacy_longitude = jbody.response.body.items.item[i].XPos._text;
+                }else{
+                    listData.pharmacy_longitude = null;
+                }
+                if(jbody.response.body.items.item[i].YPos != undefined){
+                    listData.pharmacy_latitude = jbody.response.body.items.item[i].YPos._text;
+                }else{
+                    listData.pharmacy_latitude = null;
+                }
 
-
-            DataList[i] = listData;
+                DataList[i] = listData;
+        }
     }
+
+    return DataList
 }
 
+//약국 조회(최대20개)
+async function selectPharmacy(req){
+
+    //param이 제대로 안들어 왔을때
+    if(!req.query.longitude || !req.query.latitude){
+        return -1
+    }
+
+    var DataList = [];
+    var url = 'http://apis.data.go.kr/B551182/pharmacyInfoService/getParmacyBasisList';
+    var key = 'PLo6jiIN0HeZlR%2F6VMg54t7W9zrN9GtRRXySPLeOzjCi5B7ukNvc9IS%2FdpASIXhd8ZHXkYTMMntVEUDqMgdWXg%3D%3D';
+
+    var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + key; /* Service Key*/
+    queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /* */
+    queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('20'); /* */
+    queryParams += '&' + encodeURIComponent('xPos') + '=' + encodeURIComponent(`${req.query.longitude}`); /* */
+    queryParams += '&' + encodeURIComponent('yPos') + '=' + encodeURIComponent(`${req.query.latitude}`); /* */
+    queryParams += '&' + encodeURIComponent('radius') + '=' + encodeURIComponent('2000'); /* */
+
+
+    res = await request('GET', url + queryParams);
+
+    apibody = res.getBody();
+
+    var jsonbody = converter.xml2json(apibody, {compact: true ,spaces:4});
+    var jbody = JSON.parse(jsonbody);
+
+    total = jbody.response.body.totalCount._text;
+
+    if(total > 20){
+        DataList = apiselect(jbody, 20);
+    }else{
+        DataList = apiselect(jbody, total);
+    }
+    
     //검색된 약국이 없을때
     if(DataList.length == 0){
         return -2;
@@ -104,6 +136,8 @@ async function selectPharmacy(req){
     
     return DataList;
 }
+
+
 
 
 
