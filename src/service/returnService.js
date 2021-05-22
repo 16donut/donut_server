@@ -49,11 +49,31 @@ async function selectPharmacy(req){
                 "pharmacy_latitude" : 0.0
             };
         
-            listData.pharmacy_name = jbody.response.body.items.item[i].yadmNm._text;
-            listData.pharmacy_number = jbody.response.body.items.item[i].telno._text;
-            listData.pharmacy_address = jbody.response.body.items.item[i].addr._text;
-            listData.pharmacy_longitude = jbody.response.body.items.item[i].XPos._text;
-            listData.pharmacy_latitude = jbody.response.body.items.item[i].YPos._text;
+            if(jbody.response.body.items.item[i].yadmNm != undefined){
+                listData.pharmacy_name = jbody.response.body.items.item[i].yadmNm._text;
+            }else{
+                listData.pharmacy_name = null;
+            }
+            if(jbody.response.body.items.item[i].telno != undefined){
+                listData.pharmacy_number = jbody.response.body.items.item[i].telno._text;
+            }else{
+                listData.pharmacy_number = null;
+            }
+            if(jbody.response.body.items.item[i].addr != undefined){
+                listData.pharmacy_address = jbody.response.body.items.item[i].addr._text;
+            }else{
+                listData.pharmacy_address = null;
+            }
+            if(jbody.response.body.items.item[i].XPos != undefined){
+                listData.pharmacy_longitude = jbody.response.body.items.item[i].XPos._text;
+            }else{
+                listData.pharmacy_longitude = null;
+            }
+            if(jbody.response.body.items.item[i].YPos != undefined){
+                listData.pharmacy_latitude = jbody.response.body.items.item[i].YPos._text;
+            }else{
+                listData.pharmacy_latitude = null;
+            }
 
             DataList[i] = listData;
     }else{
@@ -71,6 +91,7 @@ async function selectPharmacy(req){
             listData.pharmacy_address = jbody.response.body.items.item[i].addr._text;
             listData.pharmacy_longitude = jbody.response.body.items.item[i].XPos._text;
             listData.pharmacy_latitude = jbody.response.body.items.item[i].YPos._text;
+
 
             DataList[i] = listData;
     }
