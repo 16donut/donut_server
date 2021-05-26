@@ -26,9 +26,9 @@ async function selectNoEatMedicine(user_idx){
 async function selectAbandonMedicine(user_idx){
     const abandonMedicineSql = `
     SELECT pm.preMedicineIdx as idx, pm.pre_medicine_name as name, em.expire_dt as date
-    FROM EXPIRE_MEDICINE as em, PRESCRIPTION AS ps, PRESCRIPTION_MEDICINE AS pm, DOES_CHECK AS dc
-    WHERE ps.userIdx = ? AND ps.prescriptionIdx = pm.prescriptionIdx AND pm.preMedicineIdx =dc.preMedicineIdx AND dc.does_check = 0 
-    AND em.preMedicineIdx = pm.preMedicineIdx AND em.expire_dt < now()
+    FROM EXPIRE_MEDICINE as em, PRESCRIPTION AS ps, PRESCRIPTION_MEDICINE AS pm
+    WHERE ps.userIdx = ? AND ps.prescriptionIdx = pm.prescriptionIdx AND em.preMedicineIdx = pm.preMedicineIdx
+    AND em.abandon_check = 0
     ORDER BY date ASC, idx ASC
     `
     const param = [user_idx];
