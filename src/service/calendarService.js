@@ -52,12 +52,12 @@ async function selectNoEatMedicineService(user_idx){
         var allData = {
             "preMedicineIdx" : 0,
             "pre_medicine_name" : "",
-            "prescription_dt" : Date,
+            "does_dt" : Date,
         }
 
         allData.preMedicineIdx = selectData[i].idx;
         allData.pre_medicine_name = selectData[i].name;
-        allData.prescription_dt = formatDate(selectData[i].date);
+        allData.does_dt = formatDate(selectData[i].date);
 
         dataList.push(allData);
     }
